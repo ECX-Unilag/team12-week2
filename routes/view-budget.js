@@ -19,13 +19,18 @@ router.get("/api/budget", cors(), isLoggedIn, function (req, res) {
                 if(err){
                     res.send({'error':'Something went wrong.'})
                 }else{
-                    res.send({ "user": foundUser1.toArray(), "budget":JSON.parse(circularStructureStringify(allData))
-                    });
-                } 
+                    if(allData.length === 0){
+                        res.send({"message":"You do not have any running budget profile."});
+                    }else{
+                        res.send({ "user": foundUser1.toArray(), "budget":JSON.parse(circularStructureStringify(allData))})
+                    }
+                }
+            
             })
         }
+        
 
-    })
+    });
 });
 
 

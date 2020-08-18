@@ -5,6 +5,8 @@ const Course = require("../models/Budget");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const cors = require("cors");
 const circularStructureStringify = require('circular-structure-stringify');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.EMAIL_KEY);
 
 
 router.post("/api/:id/:item_id", cors(), isLoggedIn, function (req, res) {
@@ -13,7 +15,26 @@ router.post("/api/:id/:item_id", cors(), isLoggedIn, function (req, res) {
             res.send({"error":"Something went wrong."})
         } else {
             const item = foundBudget.expenditure.find(item => String(item._id) === req.params.item_id);
-            console.log(item)
+            if(parseInt(req.body.amount) > item.budget || parseInt(req.body.amount) > (item.budget - item.expenses)){
+                res.send({"message": "You have spent over the budget. Unsuccessful operation."})
+            }
+            if((item.budget - item.expenses) < 0.05(item.budget)){
+                User.find({username : foundBudget.username}, function(err, foundUser){
+                    if(err){
+                        console.log(err)
+                    }else{
+                        const msg = {
+                            to: foundUser.email,
+                            from: 'developmenthub123@gmail.com',
+                            subject: 'EXPENSES ALERT!',
+                            html:     `Dear ${foundUser.fullName}. <br> Expenses made on ${item.title} has overshot the 95% of the allocated budget! Watch it before you go broke!`,
+                        };
+                        sgMail.send(msg)
+                    }
+                })
+               
+            }
+           
             const updatedItem= {title:item.title, budget: item.budget, expenses: parseInt(req.body.amount)};
             const index = foundBudget.expenditure.indexOf(item);
             if(index !== -1){

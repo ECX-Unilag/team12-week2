@@ -45,7 +45,7 @@ router.post("/api/user", cors(),function (req, res) {
                         to: req.body.email,
                         from: 'developmenthub123@gmail.com',
                         subject: 'Hello! '+ req.body.fullName,
-                        html: 'This is just a subtle reminder that you should visit the budgetify app to create a budget if you have not. If you have, please visit the app to document all expenses made for the day. <br><br> Best Regards!',
+                        html: '<p>This is just a subtle reminder that you should visit the budgetify app to create a budget if you have not. If you have, please visit the app to document all expenses made for the day. <br><br> Best Regards!</p>',
                     };
                     sgMail.send(msg);});
 //================================================================================================

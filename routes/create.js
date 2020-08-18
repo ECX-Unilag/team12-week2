@@ -7,6 +7,7 @@ var mongoose = require("mongoose"),
     Budget = require("../models/Budget"),
     isLoggedIn = require("../middleware/isLoggedIn");
     const circularStructureStringify = require('circular-structure-stringify');
+    const schedule = require("node-schedule");
 
 
 // ==========CREATE A BUDGET==================================
@@ -15,31 +16,52 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
         if (err || foundUser1.length === 0) {
             res.send({"error":"Something went wrong creating a new budget."})
         } else {
-            let budget = {gross: req.body.gross, unallocated: parseInt(req.body.gross) - parseInt(req.body.budget), 
-                expenditure:[{ title: req.body.title, budget: req.body.budget, expenses: 0 }]}
-            Budget.create(budget, function(err, newBudget){
-                if(err){
-                    res.send({"error":"Something went wrong creating a new budget."})
+            Budget.find({username: foundUser1.username}, function(err, foundUser){
+                if(foundUser){
+                    res.send({"message": "You have a running budget profile."})
                 }else{
-                    newBudget.username = req.user.username;
-                    newBudget.save()
-                    const msg = {
-                        to: foundUser1.email,
-                        from: 'developmenthub123@gmail.com',
-                        subject: 'New Budget Created!',
-                        html: `Way to go ${foundUser1.fullName}. <br> We can see that you just created a new budget profile. Keep up the good work! <br><br> Best Regards.`,
-                    };
-                    sgMail.send(msg)
-                    Budget.find({username : req.user.username}).toArray((err, allData) => {
+                    let budget = {gross: req.body.gross, unallocated: parseInt(req.body.gross) - parseInt(req.body.budget), 
+                        expenditure:[{ title: req.body.title, budget: req.body.budget, expenses: 0 }]}
+                    Budget.create(budget, function(err, newBudget){
                         if(err){
-                            res.send({'error':'Something went wrong.'})
+                            res.send({"error":"Something went wrong creating a new budget."})
                         }else{
-                            res.send({ "user": foundUser1.toArray(), "budget":JSON.parse(circularStructureStringify(allData)), "message":"Budget created successfully."});
-                        } 
+                            newBudget.username = req.user.username;
+                            newBudget.save()
+                            const msg = {
+                                to: foundUser1.email,
+                                from: 'developmenthub123@gmail.com',
+                                subject: 'New Budget Created!',
+                                html: `Way to go ${foundUser1.fullName}. <br> We can see that you just created a new budget profile. Keep up the good work! <br><br> Best Regards.`,
+                            };
+                            sgMail.send(msg)
+        
+                            // ===============================================================
+                            setInterval(() => {
+                                Budget.findByIdAndDelete(newBudget._id, function(err, deletedBudget){
+                                    if(err){
+                                        console.log(err)
+                                    }else{
+                                        console.log("budget deleted!")
+                                    }
+                                })
+                            }, 2592000000)
+                           
+        //================================================================================================
+        
+                            Budget.find({username : req.user.username}).toArray((err, allData) => {
+                                if(err){
+                                    res.send({'error':'Something went wrong.'})
+                                }else{
+                                    res.send({ "user": foundUser1.toArray(), "budget":JSON.parse(circularStructureStringify(allData)), "message":"Budget created successfully."});
+                                } 
+                            })
+                           
+                        }
                     })
-                   
                 }
             })
+           
         }
 
     })
