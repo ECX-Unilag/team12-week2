@@ -27,7 +27,7 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
                         to: foundUser1.email,
                         from: 'developmenthub123@gmail.com',
                         subject: 'New Budget Created!',
-                        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                        html: `Way to go ${foundUser1.fullName}. <br> We can see that you just created a new budget profile. Keep up the good work! <br><br> Best Regards.`,
                     };
                     sgMail.send(msg)
                     Budget.find({username : req.user.username}).toArray((err, allData) => {

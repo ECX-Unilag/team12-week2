@@ -45,7 +45,7 @@ router.post("/api/user", cors(),function (req, res) {
                         to: req.body.email,
                         from: 'developmenthub123@gmail.com',
                         subject: 'Hello! '+ req.body.fullName,
-                        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                        html: 'This is just a subtle reminder that you should visit the budgetify app to create a budget if you have not. If you have, please visit the app to document all expenses made for the day. <br><br> Best Regards!',
                     };
                     sgMail.send(msg);});
 //================================================================================================
@@ -55,7 +55,7 @@ router.post("/api/user", cors(),function (req, res) {
                     to: req.body.email,
                     from: 'developmenthub123@gmail.com',
                     subject: 'Hello! Welcome to Budgetify!',
-                    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                    html: `<strong>Hello ${req.body.fullName}</strong> <br> We are glad to have you join our platform focused at helping you spend wisely. Have a great time here! <br><br> Best Regards.`,
                 };
                 sgMail.send(msg).then(() => {
                     res.send({"success": "Sign up successful. Please login to begin."});
