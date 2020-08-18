@@ -7,7 +7,7 @@ const cors = require("cors");
 const circularStructureStringify = require('circular-structure-stringify');
 
 
-router.post("/api/:id/:item_id", cors(),function (req, res) {
+router.post("/api/:id/:item_id", cors(), isLoggedIn, function (req, res) {
     Budget.findById(req.params.id, function (err, foundBudget) {
         if (err || foundBudget.length === 0) {
             res.send({"error":"Something went wrong."})

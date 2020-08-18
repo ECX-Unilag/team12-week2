@@ -10,18 +10,26 @@ var mongoose = require("mongoose"),
 
 
 // ==========CREATE A BUDGET==================================
-router.post("/api/new", cors(), function (req, res) {
+router.post("/api/new", cors(), isLoggedIn, function (req, res) {
     User.find({ username: req.user.username }, function (err, foundUser1) {
         if (err || foundUser1.length === 0) {
             res.send({"error":"Something went wrong creating a new budget."})
         } else {
-            let budget = {gross: req.body.gross, unallocated: parseInt(req.body.gross) - parseInt(req.body.budget), expenditure:[{ title: req.body.title, budget: req.body.budget, expenses: 0 }]}
+            let budget = {gross: req.body.gross, unallocated: parseInt(req.body.gross) - parseInt(req.body.budget), 
+                expenditure:[{ title: req.body.title, budget: req.body.budget, expenses: 0 }]}
             Budget.create(budget, function(err, newBudget){
                 if(err){
                     res.send({"error":"Something went wrong creating a new budget."})
                 }else{
                     newBudget.username = req.user.username;
                     newBudget.save()
+                    const msg = {
+                        to: foundUser1.email,
+                        from: 'developmenthub123@gmail.com',
+                        subject: 'New Budget Created!',
+                        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                    };
+                    sgMail.send(msg)
                     Budget.find({username : req.user.username}).toArray((err, allData) => {
                         if(err){
                             res.send({'error':'Something went wrong.'})
@@ -39,7 +47,7 @@ router.post("/api/new", cors(), function (req, res) {
 
 
 //==========================ADD BUDGET===================================
-router.post("/api/:id/add", cors(), function (req, res) {
+router.post("/api/:id/add", cors(), isLoggedIn, function (req, res) {
     Budget.findById(req.params.id, function (err, foundBudget) {
         if (err || foundBudget.length === 0) {
             res.send({"error":"Something went wrong."})
