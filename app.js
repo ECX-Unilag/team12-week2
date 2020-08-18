@@ -16,23 +16,18 @@ if (process.env.NODE_ENV === 'production')
 mongoose.set('debug', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useFindAndModify', false);
-app.use(session({
-    resave: false,
-    saveUninitialized: false,
-    cookieName: 'session',
-    secret: "8yf9-7GJG335{}+Ihdjhjh67ubhjk88985bbj__jA",
-    duration: 1800000,
-    activeDuration: 600000,
-    //httpOnly: true,
-    //secure: true,
-    ephemeral: false
-}));
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
+app.use(function(req, res, next){
+	res.locals.currentUser = req.user;
+	next();
+});
+
+
 
 
 
