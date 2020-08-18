@@ -1,0 +1,29 @@
+{
+  "name": "Budgetify",
+  "version": "1.0.0",
+  "description": "A bugeting wweb app designed to help you track spending and save more.",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "charles ugbana",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^7.0.1",
+    "body-parser": "^1.19.0",
+    "circular-structure-stringify": "^1.0.6",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "helmet": "^3.22.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.9.9",
+    "mongoose-autopopulate": "^0.12.2",
+    "node-schedule": "^1.3.2",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.0.1",
+    "path": "^0.12.7"
+  }
+}
