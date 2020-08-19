@@ -40,7 +40,7 @@ router.post("/api/:id/:item_id", cors(), function (req, res) {
             if(index !== -1){
                 foundBudget.expenditure[index] = updatedItem;
                 foundBudget.save();
-                Budget.find({username : req.user.username}).toArray((err, allData) => {
+                Budget.find({username : req.body.user.username}).toArray((err, allData) => {
                     if(err){
                         res.send({'error':'Something went wrong.'})
                     }else{
