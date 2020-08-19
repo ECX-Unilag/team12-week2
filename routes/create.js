@@ -8,6 +8,8 @@ var mongoose = require("mongoose"),
     isLoggedIn = require("../middleware/isLoggedIn");
     const circularStructureStringify = require('circular-structure-stringify');
     const schedule = require("node-schedule");
+    const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.EMAIL_KEY);
 
 
 // ==========CREATE A BUDGET==================================
@@ -40,7 +42,7 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
                            
         //================================================================================================
         
-                            Budget.find({username : req.body.user.username}).toArray((err, allData) => {
+                            Budget.find({username : req.body.user.username}, (err, allData) => {
                                 if(err){
                                     res.send({'error':'Something went wrong.'})
                                 }else{
