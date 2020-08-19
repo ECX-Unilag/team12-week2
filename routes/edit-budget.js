@@ -9,7 +9,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.EMAIL_KEY);
 
 
-router.post("/api/:id/:item_id", cors(), isLoggedIn, function (req, res) {
+router.post("/api/:id/:item_id", cors(), function (req, res) {
     Budget.findById(req.params.id, function (err, foundBudget) {
         if (err || foundBudget.length === 0) {
             res.send({"error":"Something went wrong."})
