@@ -13,10 +13,10 @@ var mongoose = require("mongoose"),
 // ==========CREATE A BUDGET==================================
 router.post("/api/new", cors(), function (req, res) {
     User.find({ username: req.body.user.username }, function (err, foundUser1) {
-        if (err) {
+        if (err || foundUser1.length === 0) {
             res.send({"error":"Something went wrong creating a new budget."})
         } else {
-            Budget.find({username: foundUser1.username}, function(err, foundUser){
+            Budget.find({username: req.body.user.username}, function(err, foundUser){
                 if(foundUser){
                     res.send({"message": "You have a running budget profile."})
                 }else{
