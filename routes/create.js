@@ -11,7 +11,7 @@ var mongoose = require("mongoose"),
 
 
 // ==========CREATE A BUDGET==================================
-router.post("/api/new", cors(), function (req, res) {
+router.post("/api/new", cors(), isLoggedIn, function (req, res) {
     User.find({ username: req.body.user.username }, function (err, foundUser1) {
         if (err || foundUser1.length === 0) {
             res.send({"error":"Something went wrong creating a new budget."})
@@ -37,15 +37,6 @@ router.post("/api/new", cors(), function (req, res) {
                             sgMail.send(msg)
         
                             // ===============================================================
-                            setInterval(() => {
-                                Budget.findByIdAndDelete(newBudget._id, function(err, deletedBudget){
-                                    if(err){
-                                        console.log(err)
-                                    }else{
-                                        console.log("budget deleted!")
-                                    }
-                                })
-                            }, 2592000000)
                            
         //================================================================================================
         
@@ -69,7 +60,7 @@ router.post("/api/new", cors(), function (req, res) {
 
 
 //==========================ADD BUDGET===================================
-router.post("/api/:id/add", cors(),  function (req, res) {
+router.post("/api/:id/add", cors(), isLoggedIn,  function (req, res) {
     Budget.findById(req.params.id, function (err, foundBudget) {
         if (err || foundBudget.length === 0) {
             res.send({"error":"Something went wrong."})
