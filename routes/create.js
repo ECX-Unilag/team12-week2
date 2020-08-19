@@ -26,7 +26,7 @@ router.post("/api/new", cors(), function (req, res) {
                         if(err){
                             res.send({"error":"Something went wrong creating a new budget."})
                         }else{
-                            newBudget.username = req.user.username;
+                            newBudget.username = req.body.user.username;
                             newBudget.save()
                             const msg = {
                                 to: foundUser1.email,
