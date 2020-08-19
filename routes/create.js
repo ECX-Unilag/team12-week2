@@ -22,14 +22,12 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
                 if(foundUser.length !== 0){
                     res.send({"message": "You have a running budget profile."})
                 }else{
-                    let budget = {gross: req.body.gross, unallocated: parseInt(req.body.gross) - parseInt(req.body.budget), 
+                    let budget = {username = req.body.user.username, gross: req.body.gross, unallocated: parseInt(req.body.gross) - parseInt(req.body.budget), 
                         expenditure:[{ title: req.body.title, budget: req.body.budget, expenses: 0 }]}
                     Budget.create(budget, function(err, newBudget){
                         if(err){
                             res.send({"error":"Something went wrong creating a new budget."})
                         }else{
-                            newBudget.username = req.body.user.username;
-                            newBudget.save()
                             Budget.find({username : req.body.user.username}).toArray((err, allData) => {
                                 if(err){
                                     res.send({'error':'Something went wrong.'})
