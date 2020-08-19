@@ -1,5 +1,5 @@
 {
-  "name": "Budgetify",
+  "name": "budgetify",
   "version": "1.0.0",
   "description": "A bugeting wweb app designed to help you track spending and save more.",
   "main": "app.js",

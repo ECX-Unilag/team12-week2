@@ -20,7 +20,7 @@ router.get("/",  cors(), function(req, res){
     res.send({"success":"API for Budgetify, built by Charles Ugbana."})
 })
 
-router.post("/api/login", cors(), passport.authenticate("local"), function (req, res) {
+router.post("/api/login", passport.authenticate("local"), function (req, res) {
         res.send({"message":"You are logged in."})
     });
     
