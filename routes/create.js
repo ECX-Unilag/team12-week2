@@ -43,7 +43,19 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
                                 html: `Way to go ${foundUser1.fullName}. <br> We can see that you just created a new budget profile. Keep up the good work! <br><br> Best Regards.`,
                             };
                             sgMail.send(msg)
-        
+                            let renewalTime = new Date(Date.now());
+                            let endSub = new Date(renewalTime.getTime() + 2628002880);
+                            let code = newBudget._id;
+                            schedule.scheduleJob(endSub, function () {
+                                User.findOneAndDelete(code, function (err, deletedBudget) {
+                                    const msg = {
+                                        to: foundUser1.slice()[0].email,
+                                        from: 'developmenthub123@gmail.com',
+                                        subject: 'Your budget profile has been deleted.',
+                                        html: '<p><strong>Hello there!</strong></p><p>Trust you are keeping safe. Please renew your subscription to continue using this service</p><p><i>Warm Regards!</i></p>'
+                                    };
+                                    sgMail.send(msg)
+                                })})
                             // ===============================================================
                            
         //================================================================================================
