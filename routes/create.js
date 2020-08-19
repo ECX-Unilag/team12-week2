@@ -37,7 +37,7 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
                             })
                            
                             const msg = {
-                                to: foundUser1.email,
+                                to: foundUser1.slice()[0].email,
                                 from: 'developmenthub123@gmail.com',
                                 subject: 'New Budget Created!',
                                 html: `Way to go ${foundUser1.fullName}. <br> We can see that you just created a new budget profile. Keep up the good work! <br><br> Best Regards.`,
@@ -47,12 +47,12 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
                             let endSub = new Date(renewalTime.getTime() + 2628002880);
                             let code = newBudget._id;
                             schedule.scheduleJob(endSub, function () {
-                                User.findOneAndDelete(code, function (err, deletedBudget) {
+                                Budget.findOneAndDelete(code, function (err, deletedBudget) {
                                     const msg = {
                                         to: foundUser1.slice()[0].email,
                                         from: 'developmenthub123@gmail.com',
-                                        subject: 'Your budget profile has been deleted.',
-                                        html: '<p><strong>Hello there!</strong></p><p>Trust you are keeping safe. Please renew your subscription to continue using this service</p><p><i>Warm Regards!</i></p>'
+                                        subject: 'Your budget profile has expired.',
+                                        html: '<p><strong>Hello '+foundUser1.slice()[0].fullName+',</strong></p><p>Please visit Bugetify to create another budget profile for the month. Remember, you cannot be spending anyhow!</p><p><i>Warm Regards!</i></p>'
                                     };
                                     sgMail.send(msg)
                                 })})
@@ -79,25 +79,51 @@ router.post("/api/:id/add", cors(), isLoggedIn,  function (req, res) {
             res.send({"error":"Something went wrong."})
         } else {
             let newBudget = { title: req.body.title, budget: req.body.budget, expenses: 0 }
+            if((foundBudget.gross - foundBudget.unallocated) < parseInt(req.body.budget)){
+                User.find({username : foundBudget.username}, function(err, foundUser){
+                    if(err){
+                        console.log(err)
+                    }else{
+                        foundUser = foundUser.slice()[0]
+                        const msg = {
+                            to: foundUser.email,
+                            from: 'developmenthub123@gmail.com',
+                            subject: 'BUDGET CREATION ALERT',
+                            html:     `Dear ${foundUser.fullName}. <br> The budget you are trying to create is greater than the available resources. Sorry!`,
+                        };
+                        sgMail.send(msg)
+                        res.send({"message":"You are out of resources to contain this budget."})
+                    }
+                })
+               
+            }
+
             Budget.findByIdAndUpdate(req.params.id, {$push: {expenditure : newBudget }}, {new: true}, function (err, updatedBudget) {
                 if(err){
                     res.send({"error":"Something went wrong."})
                 }else{
                     updatedBudget.unallocated = updatedBudget.unallocated - parseInt(req.body.budget);
                     updatedBudget.save();
-                    Budget.find({username : req.body.user.username}).toArray((err, allData) => {
+                    User.find({username : updatedBudget.username}, function(err, foundUser){
                         if(err){
-                            res.send({'error':'Something went wrong.'})
+                            console.log(err)
                         }else{
-                            res.send({ "user": foundUser1.toArray(), "budget":JSON.parse(circularStructureStringify(allData)), 
-                            "message":"Item added successfully."});
+                            Budget.find({username : updatedBudget.username}).toArray(function(err, budget){
+                                if(err){
+                                    console.log(err)
+                                }else{
+                                    res.send({ "user": foundUser.toArray(), "budget":JSON.parse(circularStructureStringify(budget)), 
+                                "message":"Item added successfully."});
+                                }
+                        })
+                            
                         } 
                     })
                 }
             })
         }
-
     })
-});
+    })
+
 
 module.exports = router;

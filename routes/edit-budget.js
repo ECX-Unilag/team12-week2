@@ -24,7 +24,7 @@ router.post("/api/:id/:item_id", cors(), isLoggedIn, function (req, res) {
                         console.log(err)
                     }else{
                         const msg = {
-                            to: foundUser.email,
+                            to: foundUser.slice()[0].email,
                             from: 'developmenthub123@gmail.com',
                             subject: 'EXPENSES ALERT!',
                             html:     `Dear ${foundUser.fullName}. <br> Expenses made on ${item.title} has overshot the 95% of the allocated budget! Watch it before you go broke!`,
@@ -34,6 +34,8 @@ router.post("/api/:id/:item_id", cors(), isLoggedIn, function (req, res) {
                 })
                
             }
+
+            
            
             const updatedItem= {title:item.title, budget: item.budget, expenses: parseInt(req.body.amount)};
             const index = foundBudget.expenditure.indexOf(item);
