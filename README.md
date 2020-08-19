@@ -2,7 +2,7 @@
 
 #Budgetify (Web App)
 
-Project link:
+Project link: https://zealous-aryabhata-69f218.netlify.app/
 
 Design Link: https://xd.adobe.com/view/ca812f78-3e6d-465b-adea-c8ddd24f609b-9fd2
 
