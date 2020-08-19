@@ -17,7 +17,7 @@ router.post("/api/new", cors(), function (req, res) {
             res.send({"error":"Something went wrong creating a new budget."})
         } else {
             Budget.find({username: req.body.user.username}, function(err, foundUser){
-                if(foundUser){
+                if(foundUser.length !== 0){
                     res.send({"message": "You have a running budget profile."})
                 }else{
                     let budget = {gross: req.body.gross, unallocated: parseInt(req.body.gross) - parseInt(req.body.budget), 
