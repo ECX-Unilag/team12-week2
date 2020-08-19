@@ -71,7 +71,7 @@ router.post("/api/:id/add", cors(), isLoggedIn,  function (req, res) {
                 if(err){
                     res.send({"error":"Something went wrong."})
                 }else{
-                    updatedBudget.unallocated = updatedBudget.unallocated - req.body.budget;
+                    updatedBudget.unallocated = updatedBudget.unallocated - parseInt(req.body.budget);
                     updatedBudget.save();
                     Budget.find({username : req.body.user.username}).toArray((err, allData) => {
                         if(err){

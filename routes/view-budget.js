@@ -10,7 +10,7 @@ var mongoose = require("mongoose"),
 
 
 // ==========CREATE A BUDGET==================================
-router.get("/api/budget", cors(), function (req, res) {
+router.get("/api/budget", cors(), isLoggedIn, function (req, res) {
     User.find({ username: req.body.user.username }, function (err, foundUser1) {
         if (err || foundUser1.length === 0) {
             res.send({"error":"Something went wrong."})

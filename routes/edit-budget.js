@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const mongoose = require("mongoose");
 const User = require("../models/User");
-const Course = require("../models/Budget");
+const Budget = require("../models/Budget");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const cors = require("cors");
 const circularStructureStringify = require('circular-structure-stringify');
@@ -9,7 +9,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.EMAIL_KEY);
 
 
-router.post("/api/:id/:item_id", cors(), function (req, res) {
+router.post("/api/:id/:item_id", cors(), isLoggedIn, function (req, res) {
     Budget.findById(req.params.id, function (err, foundBudget) {
         if (err || foundBudget.length === 0) {
             res.send({"error":"Something went wrong."})
@@ -40,7 +40,7 @@ router.post("/api/:id/:item_id", cors(), function (req, res) {
             if(index !== -1){
                 foundBudget.expenditure[index] = updatedItem;
                 foundBudget.save();
-                Budget.find({username : req.body.user.username}).toArray((err, allData) => {
+                Budget.find({username : foundBudget.username}).toArray((err, allData) => {
                     if(err){
                         res.send({'error':'Something went wrong.'})
                     }else{
