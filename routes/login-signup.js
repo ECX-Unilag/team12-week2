@@ -20,22 +20,8 @@ router.get("/",  cors(), function(req, res){
     res.send({"success":"API for Budgetify, built by Charles Ugbana."})
 })
 
-router.post("/api/login", cors(), function (req, res, next) {
-    passport.authenticate("local", function(err, user, info){
-        if(err){
-            return next(err);
-        }
-        if(!user){
-            return res.send(401, {'message': 'Invalid credentials!'});
-        }
-        req.login(user, function(err){
-            if(err){
-                return next(err);
-            }
-            return res.send(401, {'message': 'You are logged in!'});
-        })
-    })(req, res, next);
-       
+router.post("/api/login", cors(), passport.authenticate("local"), function (req, res) {
+        res.send({"message":"You are logged in."})
     });
     
 router.post("/api/user", cors(),function (req, res) {
