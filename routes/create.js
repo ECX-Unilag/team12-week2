@@ -30,6 +30,14 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
                         }else{
                             newBudget.username = req.body.user.username;
                             newBudget.save()
+                            Budget.find({username : req.body.user.username}).toArray((err, allData) => {
+                                if(err){
+                                    res.send({'error':'Something went wrong.'})
+                                }else{
+                                    res.send({ "user": foundUser1.toArray(), "budget":JSON.parse(circularStructureStringify(allData)), "message":"Budget created successfully."});
+                                } 
+                            })
+                           
                             const msg = {
                                 to: foundUser1.email,
                                 from: 'developmenthub123@gmail.com',
@@ -42,13 +50,6 @@ router.post("/api/new", cors(), isLoggedIn, function (req, res) {
                            
         //================================================================================================
         
-                            Budget.find({username : req.body.user.username}, (err, allData) => {
-                                if(err){
-                                    res.send({'error':'Something went wrong.'})
-                                }else{
-                                    res.send({ "user": foundUser1.toArray(), "budget":JSON.parse(circularStructureStringify(allData)), "message":"Budget created successfully."});
-                                } 
-                            })
                            
                         }
                     })
