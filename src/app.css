@@ -1283,9 +1283,9 @@ input:focus {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -1394,9 +1394,12 @@ input:focus {
 .budget #bar-chart {
   -webkit-box-shadow: 0px 2px 15px #555;
           box-shadow: 0px 2px 15px #555;
-  height: 500px;
-  width: 700px;
   margin-top: 10px;
+}
+
+.budget .progress-bar {
+  background-color: #66ec75;
+  color: #485281;
 }
 
 .budget .add-expenditure {
@@ -1447,6 +1450,9 @@ input:focus {
     -webkit-box-direction: normal;
         -ms-flex-direction: row;
             flex-direction: row;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
   }
   .budget #bar-chart {
     margin-right: 50px;

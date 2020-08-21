@@ -931,7 +931,7 @@ input:focus {
 
 	.dashboard {
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		flex-direction: column;
 	}
 	.title {
@@ -1007,9 +1007,11 @@ input:focus {
 	}
 	#bar-chart {
 		box-shadow: 0px 2px 15px#555;
-		height: 500px;
-		width: 700px;
 		margin-top: 10px;
+	}
+	.progress-bar {
+		background-color: #66ec75;
+		color: #485281;
 	}
 	.add-expenditure {
 		background-color: #fff;
@@ -1043,6 +1045,7 @@ input:focus {
 	@media (min-width: 1120px) {
 		.dashboard {
 			flex-direction: row;
+			justify-content: space-between;
 		}
 		#bar-chart {
 			margin-right: 50px;

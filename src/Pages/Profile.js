@@ -229,16 +229,16 @@ const Profile = (props) => {
         <div className="btn-1"></div>
         <div className="btn-2"></div>
     </div>
-    <div className="child-1">
-    <label htmlFor="title">Title</label>
-    <input type="name" name="title" id="Gross-Budget" required/>
-    </div>
     <div className="child-2">
-        <label htmlFor="gross">Gross(#)</label>
+        <label htmlFor="gross">Gross Income(#)</label>
         <input type="number" name="gross" id="Expenditure" required/>
     </div>
+    <div className="child-1">
+    <label htmlFor="title">Expected Budget Title</label>
+    <input type="name" name="title" id="Gross-Budget" required/>
+    </div>
     <div className="child-3">
-        <label htmlFor="Budget">Budget(#)</label>
+        <label htmlFor="Budget">Expected Budget Amount(#)</label>
         <input type="number" name="budget" id="Budget" required/>
     </div>
     <div className="save-budget"><button id="save-budget" type="submit">SAVE</button></div>
